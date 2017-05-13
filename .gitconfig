@@ -183,3 +183,13 @@
 [url "git://gist.github.com/"]
 
 	insteadOf = "gist:"
+
+# Enforce SSH
+[url "ssh://git@github.com/"]
+  insteadOf = "https://github.com/"
+[url "ssh://git@gitlab.com/"]
+  insteadOf = "https://gitlab.com/"
+[url "ssh://git@bitbucket.org/"]
+  insteadOf = "https://bitbucket.org/"
+[url "ssh://camalot@camalot.visualstudio.com/"]
+	insteadOf = "https://camalot.visualstudio.com/"
