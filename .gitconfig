@@ -82,6 +82,8 @@
 	whitespace = fix
 
 [core]
+	eol = lf
+	ignorecase = false
 
 	# Use custom `.gitignore` and `.gitattributes`
 	excludesfile = ~/.gitignore
