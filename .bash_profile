@@ -49,3 +49,9 @@ complete -W "NSGlobalDomain" defaults;
 
 # Add `killall` tab completion for common apps
 complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Twitter" killall;
+
+if command -v screenfetch >/dev/null 2>&1; then
+  screenfetch -E
+elif command -v archey > /dev/null 2>&1; then
+	archey
+fi
