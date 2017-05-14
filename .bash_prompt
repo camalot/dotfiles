@@ -186,6 +186,13 @@ else
 	hostStyle="${pfg_yellow}";
 fi;
 
+# Define the default prompt terminator character '$'
+if [[ "$UID" == 0 ]]; then
+  prompt_symbol="#"
+else
+  prompt_symbol="\$"
+fi
+
 # Set the terminal title and prompt.
 #trap 'echo -ne "\033]0;$BASH_COMMAND\007"' DEBUG
 PS1="\[\033]0;\u@\h | \W\007\]"; # working directory base name
@@ -197,7 +204,7 @@ PS1+="\[${pfg_white}\] ";
 PS1+="\[${pfg_green}\]\w"; # working directory full path
 PS1+="\$(prompt_git \" \[${pfg_violet} ${pfg_blue}\]\")"; # Git repository details
 PS1+="\n";
-PS1+="\[${pfg_white}\]\$ \[${reset}\]"; # `$` (and reset color)
+PS1+="\[${pfg_white}\]\[${prompt_symbol}\] \[${reset}\]"; # `$` (and reset color)
 export PS1;
 
 PS2="\[${pfg_yellow}\] \[${reset}\]";
