@@ -102,5 +102,18 @@ brew install vbindiff
 brew install webkit2png
 brew install zopfli
 
+# while getopts 'abf:v' flag; do
+while test $# -gt 0; do
+  case "$1" in
+		p|powershell)
+				installer -pkg powershell-6.0.0-beta.1-osx.10.12-x64.pkg -target /
+		;;
+		py3|python3)
+			apt install python3.6 python3-pip -y
+			pip3 install pylint behave
+		;;
+  esac
+done
+
 # Remove outdated versions from the cellar.
 brew cleanup
