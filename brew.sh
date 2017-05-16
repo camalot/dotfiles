@@ -47,6 +47,7 @@ wget -P ~/ https://raw.githubusercontent.com/raylee/tldr/master/tldr
 chmod +x ~/bin/tldr
 chown $USER:$USER ~/bin/tldr
 
+brew install thefuck
 
 # Install RingoJS and Narwhal.
 # Note that the order in which these are installed is important;
