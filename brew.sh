@@ -44,6 +44,7 @@ chmod +x /usr/bin/screenfetch
 
 
 wget -P ~/ https://raw.githubusercontent.com/raylee/tldr/master/tldr
+mv ~/tldr ~/bin/tldr
 chmod +x ~/bin/tldr
 chown $USER:$USER ~/bin/tldr
 
