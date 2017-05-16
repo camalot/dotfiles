@@ -12,10 +12,24 @@ if [[ $COLORTERM = gnome-* && $TERM = xterm ]] && infocmp gnome-256color >/dev/n
 elif infocmp xterm-256color >/dev/null 2>&1; then
 	export TERM='xterm-256color';
 fi;
-
 prompt_git() {
 	local s='';
 	local branchName='';
+
+	local branchUntrackedSymbol='Ω'
+	local branchIdenticalSymbol='≡'
+	local branchGoneSymbol='×'
+	local branchAheadSymbol='↑'
+	local branchBehindSymbol='↓'
+	local branchBehindAndAheadSymbol='↕'
+	local branchBorkedSymbol='≠'
+
+	local fileUntrackedSymbol='?'
+	local fileAddedSymbol='+'
+	local fileRemovedSymbol='-'
+	local fileModifiedSymbol='~'
+	local fileConflictSymbol='!'
+	local fileStashedSymbol='$'
 
 	# Check if the current directory is in a Git repository.
 	if [ $(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}") == '0' ]; then
@@ -26,64 +40,72 @@ prompt_git() {
 			# Ensure the index is up to date.
 			git update-index --really-refresh -q &>/dev/null;
 
-			UPSTREAM=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
-			LOCAL_BRANCH_SHA=$(git rev-parse --verify @)
-			REMOTE_BRANCH_SHA=$(git rev-parse --verify "$UPSTREAM")
-			BASE_BRANCH_SHA=$(git merge-base @ "$UPSTREAM")
+			local UPSTREAM=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2> /dev/null)
+			local LOCAL_BRANCH_SHA=$(git rev-parse --verify @)
+			local REMOTE_BRANCH_SHA=$(git rev-parse --verify "$UPSTREAM" 2> /dev/null || git rev-parse --verify @)
+			local BASE_BRANCH_SHA=$(git merge-base @ "$UPSTREAM" 2> /dev/null || git rev-parse --verify @)
 
-			BEHIND_COUNT=$(git rev-list --left-only --count $UPSTREAM...@)
-			AHEAD_COUNT=$(git rev-list --right-only --count $UPSTREAM...@)
+			local BEHIND_COUNT=$(git rev-list --left-only --count $UPSTREAM...@ 2> /dev/null || echo 0)
+			local AHEAD_COUNT=$(git rev-list --right-only --count $UPSTREAM...@ 2> /dev/null || echo 0)
+
+			local branchColor="${pfg_cyan}"
 
 			# Check for uncommitted changes in the index.
 			if ! $(git diff --quiet --ignore-submodules --cached); then
-				s+="${pfg_green}+${pfg_blue}";
+				s+="${pfg_green}${fileAddedSymbol}${pfg_blue}";
 			fi;
 
 			# Check for unstaged changes.
 			if ! $(git diff-files --quiet --ignore-submodules --); then
-				s+="${pfg_red}!${pfg_blue}";
+				s+="${pfg_red}${fileConflictSymbol}${pfg_blue}";
 			fi;
 
 			# Check for untracked files.
 			if [ -n "$(git ls-files --others --exclude-standard)" ]; then
-				s+="${pfg_yellow}?${pfg_blue}";
+				s+="${pfg_yellow}${fileUntrackedSymbol}${pfg_blue}";
 			fi;
 
 			# Check for stashed files.
 			if $(git rev-parse --verify refs/stash &>/dev/null); then
-				s+="${pfg_white}\$$pfg_{blue}";
+				s+="${pfg_white}${fileStashedSymbol}${pfg_blue}";
 			fi;
 
-			if [ $LOCAL_BRANCH_SHA = $REMOTE_BRANCH_SHA ]; then
-				s+="${pfg_cyan}≡${pfg_blue}"
-			elif [ $LOCAL_BRANCH_SHA = $BASE_BRANCH_SHA ]; then
-				s+="${pfg_orange}"
-				if [ ! $BEHIND_COUNT = 0 ]; then
-					s+=$BEHIND_COUNT
+			if [ ! $UPSTREAM = '' ]; then
+				if [ $LOCAL_BRANCH_SHA = $REMOTE_BRANCH_SHA ]; then
+					branchColor="${pfg_cyan}"
+					s+="${pfg_cyan}${branchIdenticalSymbol}"
+				elif [ $BEHIND_COUNT -gt 0 ] && [ $AHEAD_COUNT -gt 0 ]; then
+					branchColor="${pfg_cyan}"
+					s+="${pfg_orange}${BEHIND_COUNT}${branchBehindAndAheadSymbol}${AHEAD_COUNT}"
+				# elif [ $LOCAL_BRANCH_SHA = $BASE_BRANCH_SHA ]; then
+				elif [ $BEHIND_COUNT -gt 0 ]; then
+					branchColor="${pfg_orange}"
+					s+="${pfg_orange}${BEHIND_COUNT}${branchBehindSymbol}"
+				# elif [ $REMOTE_BRANCH_SHA = $BASE_BRANCH_SHA ]; then
+				elif [ $AHEAD_COUNT -gt 0 ]; then
+					branchColor="${pfg_cyan}"
+					s+="${pfg_green}${AHEAD_COUNT}${branchAheadSymbol}"
+				else
+					branchColor="${pfg_red}"
+					s+="${pfg_red}${branchBorkedSymbol}"
 				fi
-				s+="↓${pfg_blue}"# ↑ ↓
-			elif [ $REMOTE_BRANCH_SHA = $BASE_BRANCH_SHA ]; then
-				s+="${pfg_green}↑"
-				if [ ! $AHEAD_COUNT = 0 ]; then
-					s+=$AHEAD_COUNT
-				fi
-				s+="${pfg_blue}"
 			else
-				s+="${pfg_red}≠${pfg_blue}"
+				branchColor="${pfg_red}"
+				s+="${pfg_red}${branchUntrackedSymbol}"
 			fi
 
-		fi;
+		fi
 
 		# Get the short symbolic ref.
 		# If HEAD isnt a symbolic ref, get the short SHA for the latest commit
 		# Otherwise, just give up.
 		branchName="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
 			git rev-parse --short HEAD 2> /dev/null || \
-			echo '(unknown)')";
+			echo '???')";
 
 		[ -n "${s}" ] && s=" ${s}";
 
-		echo -e "${1}[${branchName}${2}${s}]";
+		echo -e " ${branchColor}[${branchName}${s}${branchColor}]";
 	else
 		return;
 	fi;
@@ -202,7 +224,7 @@ PS1+="\[${pfg_white}\]@";
 PS1+="\[${hostStyle}\]\h"; # host
 PS1+="\[${pfg_white}\] ";
 PS1+="\[${pfg_green}\]\w"; # working directory full path
-PS1+="\$(prompt_git \" \[${pfg_violet} ${pfg_blue}\]\")"; # Git repository details
+PS1+="\$(prompt_git)"; # Git repository details
 PS1+="\n";
 PS1+="\[${pfg_white}\]\[${prompt_symbol}\] \[${reset}\]"; # `$` (and reset color)
 export PS1;
