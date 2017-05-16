@@ -18,6 +18,9 @@ alias gitpush="git push"
 alias h="history"
 alias j="jobs"
 
+eval "$(thefuck --alias)"
+alias oops="thefuck"
+
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
 	colorflag="--color"
