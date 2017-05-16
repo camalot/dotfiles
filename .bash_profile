@@ -1,5 +1,7 @@
 # Add `~/bin` to the `$PATH`
-export PATH="$HOME/bin:$PATH";
+if [ ![$PATH == *"$HOME/bin"*]]; then
+	export PATH="$HOME/bin:$PATH";
+fi
 
 if [ -f ~/.git-completion ]; then
   . ~/.git-completion

@@ -22,7 +22,6 @@ brew install gnu-sed --with-default-names
 # Note: don’t forget to add `/usr/local/bin/bash` to `/etc/shells` before
 # running `chsh`.
 # brew install bash
-brew install screenfetch
 brew tap homebrew/versions
 # brew install bash-completion2
 
@@ -34,6 +33,20 @@ brew tap homebrew/versions
 
 # Install `wget` with IRI support.
 brew install wget --with-iri
+
+mkdir -p ~/bin
+chown $USER:$USER ~/bin
+
+# install screenfetch latest
+wget -P ~/ https://raw.githubusercontent.com/KittyKatt/screenFetch/master/screenfetch-dev
+mv ~/screenfetch-dev /usr/bin/screenfetch
+chmod +x /usr/bin/screenfetch
+
+
+wget -P ~/ https://raw.githubusercontent.com/raylee/tldr/master/tldr
+chmod +x ~/bin/tldr
+chown $USER:$USER ~/bin/tldr
+
 
 # Install RingoJS and Narwhal.
 # Note that the order in which these are installed is important;
@@ -106,7 +119,8 @@ brew install zopfli
 while test $# -gt 0; do
   case "$1" in
 		p|powershell)
-				installer -pkg powershell-6.0.0-beta.1-osx.10.12-x64.pkg -target /
+			wget -P ~/  https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.1/powershell-6.0.0-beta.1-osx.10.12-x64.pkg
+			sudo installer -pkg ~/powershell-6.0.0-beta.1-osx.10.12-x64.pkg -target /
 		;;
 		py3|python3)
 			apt install python3.6 python3-pip -y
