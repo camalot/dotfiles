@@ -3,13 +3,10 @@ if [ ![$PATH == *"$HOME/bin"*]]; then
 	export PATH="$HOME/bin:$PATH";
 fi
 
-if [ -f ~/.git-completion ]; then
-  . ~/.git-completion
-fi
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you don’t want to commit.
-for file in ~/.{path,bash_prompt,bash_logout,exports,aliases,functions,extra}; do
+for file in ~/.{path,bash_prompt,bash_logout,exports,aliases,functions,extra,git-completion}; do
 	[ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
