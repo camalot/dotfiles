@@ -63,6 +63,18 @@ brew install homebrew/dupes/openssh
 brew install homebrew/dupes/screen
 # brew install homebrew/php/php56 --with-gmp
 
+# chef / ruby Stuff
+# brew install gnupg
+# gpg --keyserver hkp://keys.gnupg.net
+#     --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+# curl -sSL https://get.rvm.io | bash -s stable --ruby
+
+brew install ruby-build
+brew install rbenv
+rbenv init
+rbenv install 2.4.1
+rbenv global 2.4.1
+
 # Install font tools.
 # brew tap bramstein/webfonttools
 # brew install sfnt2woff
