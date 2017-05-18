@@ -1,7 +1,10 @@
-# Add `~/bin` to the `$PATH`
-if [ ![$PATH == *"$HOME/bin"*]]; then
+# Add `~/bin` to the `$PATH
+case ":$PATH:" in
+  *:$HOME/bin:*) echo $HOME/bin already exists;;
+  *)
 	export PATH="$HOME/bin:$PATH";
-fi
+	;;
+esac
 
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
