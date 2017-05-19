@@ -48,7 +48,7 @@ fi;
 defaults write com.apple.finder AppleShowAllFiles TRUE
 killall Finder
 
-if command -v rbenv; then
+if command -v rbenv > /dev/null 2>&1; then
 	eval "$(rbenv init -)"
 fi
 
