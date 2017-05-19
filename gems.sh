@@ -1,1 +1,2 @@
-gem install berksfile
+#!/usr/bin/env bash
+gem install berkshelf

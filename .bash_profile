@@ -48,7 +48,9 @@ fi;
 defaults write com.apple.finder AppleShowAllFiles TRUE
 killall Finder
 
-eval "$(rbenv init -)"
+if command -v rbenv; then
+	eval "$(rbenv init -)"
+fi
 
 # Add tab completion for `defaults read|write NSGlobalDomain`
 # You could just use `-g` instead, but I like being explicit
