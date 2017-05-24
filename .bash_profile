@@ -1,10 +1,13 @@
 # Add `~/bin` to the `$PATH
-case ":$PATH:" in
-  *:$HOME/bin:*) echo $HOME/bin already exists;;
-  *)
+if [[ ! ":$PATH:" == *":$HOME/bin:"* ]]; then
 	export PATH="$HOME/bin:$PATH";
-	;;
-esac
+fi
+if [[ ! ":$PATH:" == *":$HOME/.rbenv/plugins/ruby-build/bin:"* ]]; then
+	export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH";
+fi
+if [[ ! ":$PATH:" == *"/usr/local/aws/bin:"* ]]; then
+	export PATH="/usr/local/aws/bin:$PATH";
+fi
 
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
@@ -41,6 +44,10 @@ fi;
 if type _git &> /dev/null && [ -f /usr/local/etc/bash_completion.d/git-completion.bash ]; then
 	complete -o default -o nospace -F _git g;
 fi;
+
+if [ -f /usr/local/bin/aws_completer ]; then
+	complete -C '/usr/local/bin/aws_completer' aws
+fi
 
 # Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
 [ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2- | tr ' ' '\n')" scp sftp ssh;
