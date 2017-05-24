@@ -5,10 +5,18 @@ fi
 if [[ ! ":$PATH:" == *":$HOME/.rbenv/plugins/ruby-build/bin:"* ]]; then
 	export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH";
 fi
-if [[ ! ":$PATH:" == *"/usr/local/aws/bin:"* ]]; then
+if [[ ! ":$PATH:" == *":/usr/local/aws/bin:"* ]]; then
 	export PATH="/usr/local/aws/bin:$PATH";
 fi
 
+# /usr/local/bin
+if [[ ! ":$PATH:" == *":/usr/local/sbin:"* ]]; then
+	export PATH="/usr/local/sbin:$PATH";
+fi
+#/usr/local/sbin
+if [[ ! ":$PATH:" == *":/usr/local/sbin:"* ]]; then
+	export PATH="/usr/local/sbin:$PATH";
+fi
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you don’t want to commit.

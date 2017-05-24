@@ -75,6 +75,9 @@ rbenv init
 rbenv install 2.4.1
 rbenv global 2.4.1
 
+brew install python
+brew install python3
+
 # Install font tools.
 # brew tap bramstein/webfonttools
 # brew install sfnt2woff
