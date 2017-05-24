@@ -39,8 +39,8 @@ chown $USER:$USER ~/bin
 
 # install screenfetch latest
 wget -P ~/ https://raw.githubusercontent.com/KittyKatt/screenFetch/master/screenfetch-dev
-mv ~/screenfetch-dev /usr/bin/screenfetch
-chmod +x /usr/bin/screenfetch
+mv ~/screenfetch-dev ~/bin/screenfetch
+chmod +x ~/bin/screenfetch
 
 
 wget -P ~/ https://raw.githubusercontent.com/raylee/tldr/master/tldr
@@ -140,8 +140,8 @@ while test $# -gt 0; do
 			sudo installer -pkg ~/powershell-6.0.0-beta.1-osx.10.12-x64.pkg -target /
 		;;
 		py3|python3)
-			apt install python3.6 python3-pip -y
-			pip3 install pylint behave
+			# apt install python3.6 python3-pip -y
+			# pip3 install pylint behave
 		;;
   esac
 done
